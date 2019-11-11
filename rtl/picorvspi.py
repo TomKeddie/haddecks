@@ -1,3 +1,5 @@
+import os
+
 from migen import Module, Signal, Instance, If, Cat
 from migen.fhdl.structure import ClockSignal, ResetSignal
 from migen.fhdl.specials import TSTriple
@@ -137,4 +139,5 @@ class PicoRVSpi(Module, AutoCSR):
             i_cfgreg_di = cfg,
             o_cfgreg_do = cfg_out,
         )
-        platform.add_source("rtl/spimemio.v")
+        dir_path = os.path.dirname(os.path.realpath(__file__))
+        platform.add_source(dir_path + "/spimemio.v")

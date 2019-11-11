@@ -399,14 +399,15 @@ class BaseSoC(SoCCore, AutoDoc):
             "usb_12": "clk12",
         })(DummyUsb(usb_iobuf, debug=debug, product="Hackaday Supercon Badge"))
 
+        dir_path = os.path.dirname(os.path.realpath(__file__))
         if debug:
             self.add_wb_master(self.usb.debug_bridge.wishbone)
 
             if self.cpu_type is not None:
                 self.register_mem("vexriscv_debug", 0xf00f0000, self.cpu.debug_bus, 0x200)
-                self.cpu.use_external_variant("rtl/VexRiscv_HaD_Debug.v")
+                self.cpu.use_external_variant(dir_path + "/rtl/VexRiscv_HaD_Debug.v")
         elif self.cpu_type is not None:
-            self.cpu.use_external_variant("rtl/VexRiscv_HaD.v")
+            self.cpu.use_external_variant(dir_path + "/rtl/VexRiscv_HaD.v")
 
         # Add the 16 MB SPI flash as XIP memory at address 0x03000000
         if not is_sim:
