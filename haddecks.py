@@ -444,10 +444,12 @@ class BaseSoC(SoCCore, AutoDoc):
             self.add_wb_master(self.platform.request("wishbone"))
 
         # SAO
-        self.submodules.sao0 = ShittyAddOn(self.platform, self.platform.request("sao", 0),  disable_i2c=kwargs["sao0_disable_i2c"]);
-        self.add_csr("sao0")
-        self.submodules.sao1 = ShittyAddOn(self.platform, self.platform.request("sao", 1),  disable_i2c=kwargs["sao1_disable_i2c"]);
-        self.add_csr("sao1")
+        if not kwargs["sao0_disable"]:
+            self.submodules.sao0 = ShittyAddOn(self.platform, self.platform.request("sao", 0),  disable_i2c=kwargs["sao0_disable_i2c"]);
+            self.add_csr("sao0")
+        if not kwargs["sao1_disable"]:
+            self.submodules.sao1 = ShittyAddOn(self.platform, self.platform.request("sao", 1),  disable_i2c=kwargs["sao1_disable_i2c"]);
+            self.add_csr("sao1")
         # PMOD
         platform.add_extension(_pmod_gpio)
         self.submodules.pmod = GPIOBidirectional(self.platform.request("pmod_gpio"))
@@ -513,7 +515,9 @@ def main():
 
     soc = BaseSoC(platform, is_sim=args.sim, debug=not args.no_debug,
                             cpu_type=cpu_type, cpu_variant=cpu_variant,
+                            sao0_disable=False,
                             sao0_disable_i2c=args.sao0_disable_i2c,
+                            sao1_disable=False,
                             sao1_disable_i2c=args.sao1_disable_i2c,
     )
     builder = Builder(soc, output_dir="build",
