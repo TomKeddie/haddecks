@@ -455,9 +455,10 @@ class BaseSoC(SoCCore, AutoDoc):
         self.submodules.pmod = GPIOBidirectional(self.platform.request("pmod_gpio"))
         self.add_csr("pmod")
         # GENIO
-        platform.add_extension(_genio_gpio)
-        self.submodules.genio = GPIOBidirectional(self.platform.request("genio_gpio"))
-        self.add_csr("genio")
+        if not kwargs["genio_disable"]:
+            platform.add_extension(_genio_gpio)
+            self.submodules.genio = GPIOBidirectional(self.platform.request("genio_gpio"))
+            self.add_csr("genio")
         # LEDs
         self.submodules.led0 = gpio.GPIOOut(self.platform.request("led", 0))
         self.add_csr("led0")
@@ -519,6 +520,7 @@ def main():
                             sao0_disable_i2c=args.sao0_disable_i2c,
                             sao1_disable=False,
                             sao1_disable_i2c=args.sao1_disable_i2c,
+                            genio_disable=False,
     )
     builder = Builder(soc, output_dir="build",
                             csr_csv="build/csr.csv",
