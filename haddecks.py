@@ -525,13 +525,15 @@ def main():
         cpu_type = None
         cpu_variant = None
 
-    soc = BaseSoC(platform, is_sim=args.sim, debug=not args.no_debug,
-                            cpu_type=cpu_type, cpu_variant=cpu_variant,
-                            sao0_disable=False,
-                            sao0_disable_i2c=args.sao0_disable_i2c,
-                            sao1_disable=False,
-                            sao1_disable_i2c=args.sao1_disable_i2c,
-                            genio_disable=False,
+    soc = BaseSoC(platform,
+                  is_sim=args.sim,
+                  debug=not args.no_debug,
+                  cpu_type=cpu_type, cpu_variant=cpu_variant,
+                  sao0_disable=False,
+                  sao0_disable_i2c=args.sao0_disable_i2c,
+                  sao1_disable=False,
+                  sao1_disable_i2c=args.sao1_disable_i2c,
+                  genio_disable=False,
     )
     builder = Builder(soc, output_dir="build",
                             csr_csv="build/csr.csv",
